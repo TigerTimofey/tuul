@@ -1,0 +1,26 @@
+@font-face {
+  font-family: "Ubuntu";
+  src: url("./assets//fonts//Ubuntu_Condensed/UbuntuCondensed-Regular.ttf")
+    format("truetype");
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  --brand--blue--color: #4f4ff7;
+  --brand--blue--hover--color: #383390;
+  --brand--green--color: #80d7bf;
+  --brand--dark--green--color: #283b31;
+  --brand--orange--color: #ea6646;
+  --brand--gray--color: #bdbdc4;
+  /* --brand--gray--color: #ffffff; */
+  --brand--white--color: #ffffff;
+  --brand--hover--color: #ffa152;
+}
