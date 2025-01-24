@@ -5,8 +5,6 @@ interface AuthInputsProps {
   formData: {
     username: string;
     password: string;
-    name?: string;
-    lastname?: string;
   };
   isRegisterMode: boolean;
   handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -14,35 +12,10 @@ interface AuthInputsProps {
 
 const AuthInputs: React.FC<AuthInputsProps> = ({
   formData,
-  isRegisterMode,
   handleInputChange,
 }) => {
   return (
     <div>
-      {isRegisterMode && (
-        <>
-          <TextField
-            name="name"
-            label="First Name"
-            variant="outlined"
-            fullWidth
-            value={formData.name}
-            onChange={handleInputChange}
-            required
-            sx={{ mb: 2 }}
-          />
-          <TextField
-            name="lastname"
-            label="Last Name"
-            variant="outlined"
-            fullWidth
-            value={formData.lastname}
-            onChange={handleInputChange}
-            required
-            sx={{ mb: 2 }}
-          />
-        </>
-      )}
       <TextField
         name="username"
         label="Email"

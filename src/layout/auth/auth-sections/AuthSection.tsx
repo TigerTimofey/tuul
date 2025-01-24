@@ -6,12 +6,7 @@ import AuthForm from "../AuthForm";
 interface AuthSectionProps {
   isRegisterMode: boolean;
   onToggleMode: () => void;
-  onFormSubmit: (formData: {
-    username: string;
-    password: string;
-    name?: string;
-    lastname?: string;
-  }) => void;
+  onFormSubmit: (formData: { username: string; password: string }) => void;
 }
 
 const AuthSection: React.FC<AuthSectionProps> = ({
@@ -38,7 +33,7 @@ const AuthSection: React.FC<AuthSectionProps> = ({
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "var(--brand--gray--color)",
+        backgroundColor: "var(--brand--white--color)",
       }}
     >
       <div className={animationClass}>

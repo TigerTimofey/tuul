@@ -1,14 +1,13 @@
 import React from "react";
 import { Box } from "@mui/material";
 import loginPng from "../../../assets/images/login.png";
-import regPng from "../../../assets/images/register.png";
 import logo from "../../../assets/images/logo.png";
 
 interface ImageSectionProps {
   isRegisterMode: boolean;
 }
 
-const ImageSection: React.FC<ImageSectionProps> = ({ isRegisterMode }) => {
+const ImageSection: React.FC<ImageSectionProps> = () => {
   return (
     <Box
       sx={{
@@ -23,8 +22,8 @@ const ImageSection: React.FC<ImageSectionProps> = ({ isRegisterMode }) => {
       }}
     >
       <img
-        src={isRegisterMode ? regPng : loginPng}
-        alt={isRegisterMode ? "Register" : "Login"}
+        src={loginPng}
+        alt={"Login image"}
         style={{
           position: "absolute",
           top: 0,

@@ -1,19 +1,19 @@
-import React, { useState } from "react";
-import { Box, Card, Typography } from "@mui/material";
-import "animate.css";
+import React from "react";
+import { Button, Typography } from "@mui/material";
 import AuthInputs from "./auth-form/AuthInputs";
-import AuthActions from "./auth-form/AuthActions";
-import FormMessage from "./auth-form/FormMessage";
+import { auth } from "../../config/firebase";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import AuthErrorMessage from "./auth-form/AuthErrorMessage";
+import useAuthForm from "./auth-form/hooks/useAuthForm";
+import AuthToggleLink from "./auth-form/AuthToggleLink";
 
 interface AuthFormProps {
-  onFormSubmit: (formData: {
-    username: string;
-    password: string;
-    name?: string;
-    lastname?: string;
-  }) => void;
   isRegisterMode: boolean;
   onToggleMode: () => void;
+  onFormSubmit: (formData: { username: string; password: string }) => void;
 }
 
 const AuthForm: React.FC<AuthFormProps> = ({
@@ -21,84 +21,65 @@ const AuthForm: React.FC<AuthFormProps> = ({
   isRegisterMode,
   onToggleMode,
 }) => {
-  const [formData, setFormData] = useState({
-    username: "",
-    password: "",
-    name: "",
-    lastname: "",
-  });
+  const {
+    formData,
+    error,
+    handleInputChange,
+    validateForm,
+    setError,
+    clearError,
+  } = useAuthForm(isRegisterMode);
 
-  const [message, setMessage] = useState({ type: "", text: "" });
+  const handleAuthAction = async () => {
+    const { username, password } = formData;
+    if (!validateForm()) return;
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = () => {
-    if (
-      !formData.username ||
-      !formData.password ||
-      (isRegisterMode && (!formData.name || !formData.lastname))
-    ) {
-      setMessage({
-        type: "danger",
-        text: "Please fill in all required fields.",
-      });
-      return;
+    try {
+      if (isRegisterMode) {
+        await createUserWithEmailAndPassword(auth, username, password);
+      } else {
+        await signInWithEmailAndPassword(auth, username, password);
+      }
+      clearError();
+      onFormSubmit({ username, password });
+    } catch (err: any) {
+      setError("Failed to authenticate. Please check your Email or Password.");
     }
-
-    onFormSubmit(formData);
   };
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh",
-        padding: { xs: 2 },
-      }}
-    >
-      <Card
+    <div style={{ maxWidth: "400px", margin: "auto", padding: "20px" }}>
+      <Typography
+        variant="h4"
         sx={{
-          padding: 5,
-          width: { sm: 400 },
-          boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
-          borderRadius: 2,
-          backgroundColor: "#f0efef",
+          mb: 4,
+          textAlign: "center",
+          fontFamily: "Ubuntu",
+          fontWeight: "700",
         }}
       >
-        <Typography
-          variant="h5"
-          component="h1"
-          sx={{
-            textAlign: "center",
-            color: "var(  --brand--dark--green--color)",
-            marginBottom: 3,
-            fontWeight: 600,
-          }}
-        >
-          {isRegisterMode ? "Register" : "Login"}
-        </Typography>
-
-        <FormMessage
-          message={message}
-          onClose={() => setMessage({ type: "", text: "" })}
-        />
-        <AuthInputs
-          formData={formData}
-          isRegisterMode={isRegisterMode}
-          handleInputChange={handleInputChange}
-        />
-        <AuthActions
-          isRegisterMode={isRegisterMode}
-          handleSubmit={handleSubmit}
-          onToggleMode={onToggleMode}
-        />
-      </Card>
-    </Box>
+        {isRegisterMode ? "Register" : "Login"}
+      </Typography>
+      <AuthInputs
+        formData={formData}
+        handleInputChange={handleInputChange}
+        isRegisterMode={false}
+      />
+      <AuthErrorMessage error={error} />
+      <Button
+        variant="contained"
+        color="primary"
+        fullWidth
+        onClick={handleAuthAction}
+        sx={{ mt: 2, mb: 1 }}
+      >
+        {isRegisterMode ? "Sign Up" : "Sign In"}
+      </Button>
+      <AuthToggleLink
+        isRegisterMode={isRegisterMode}
+        onToggleMode={onToggleMode}
+      />
+    </div>
   );
 };
 

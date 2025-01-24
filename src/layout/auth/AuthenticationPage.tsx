@@ -13,8 +13,6 @@ const AuthenticationPage: React.FC = () => {
   const handleFormSubmit = (formData: {
     username: string;
     password: string;
-    name?: string;
-    lastname?: string;
   }) => {
     console.log(formData);
   };
