@@ -1,5 +1,6 @@
 import React from "react";
 import { Button, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import AuthInputs from "./auth-form/AuthInputs";
 import { auth } from "../../config/firebase";
 import {
@@ -7,20 +8,19 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import AuthErrorMessage from "./auth-form/AuthErrorMessage";
-import useAuthForm from "./auth-form/hooks/useAuthForm";
+import useAuthForm from "../../hooks/useAuthForm";
 import AuthToggleLink from "./auth-form/AuthToggleLink";
 
 interface AuthFormProps {
   isRegisterMode: boolean;
   onToggleMode: () => void;
-  onFormSubmit: (formData: { username: string; password: string }) => void;
 }
 
 const AuthForm: React.FC<AuthFormProps> = ({
-  onFormSubmit,
   isRegisterMode,
   onToggleMode,
 }) => {
+  const navigate = useNavigate();
   const {
     formData,
     error,
@@ -41,7 +41,7 @@ const AuthForm: React.FC<AuthFormProps> = ({
         await signInWithEmailAndPassword(auth, username, password);
       }
       clearError();
-      onFormSubmit({ username, password });
+      navigate("/dashboard");
     } catch (err: any) {
       setError("Failed to authenticate. Please check your Email or Password.");
     }
