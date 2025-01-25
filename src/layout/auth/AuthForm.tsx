@@ -52,7 +52,7 @@ const AuthForm: React.FC<AuthFormProps> = ({
       <Typography
         variant="h4"
         sx={{
-          mb: 4,
+          mb: 2,
           textAlign: "center",
           fontFamily: "Ubuntu",
           fontWeight: "700",
@@ -65,7 +65,7 @@ const AuthForm: React.FC<AuthFormProps> = ({
         handleInputChange={handleInputChange}
         isRegisterMode={false}
       />
-      <AuthErrorMessage error={error} />
+      <AuthErrorMessage error={error} onClose={clearError} />
       <Button
         variant="contained"
         color="primary"

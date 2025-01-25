@@ -11,8 +11,14 @@ const useAuthForm = (_isRegisterMode: boolean) => {
 
   const validateForm = () => {
     const { username, password } = formData;
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
     if (!username || !password) {
-      setError("Email is required");
+      setError("Email and Password are required");
+      return false;
+    }
+    if (!emailRegex.test(username)) {
+      setError("Please enter a valid email address");
       return false;
     }
     if (password.length < 6) {

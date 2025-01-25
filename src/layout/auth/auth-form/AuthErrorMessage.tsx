@@ -1,16 +1,25 @@
 import React from "react";
-import { Typography } from "@mui/material";
+import { Snackbar, Alert } from "@mui/material";
 
 interface AuthErrorMessageProps {
   error: string | null;
+  onClose: () => void;
 }
 
-const AuthErrorMessage: React.FC<AuthErrorMessageProps> = ({ error }) => {
-  if (!error) return null;
+const AuthErrorMessage: React.FC<AuthErrorMessageProps> = ({
+  error,
+  onClose,
+}) => {
   return (
-    <Typography variant="body2" color="error" sx={{ mt: 2 }}>
-      {error}
-    </Typography>
+    <Snackbar
+      open={!!error}
+      onClose={onClose}
+      anchorOrigin={{ vertical: "top", horizontal: "right" }}
+    >
+      <Alert severity="error" onClose={onClose}>
+        {error}
+      </Alert>
+    </Snackbar>
   );
 };
 
