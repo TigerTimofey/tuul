@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 import { Button, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import AuthInputs from "./auth-form/AuthInputs";
@@ -37,6 +38,15 @@ const AuthForm: React.FC<AuthFormProps> = ({
     try {
       if (isRegisterMode) {
         await createUserWithEmailAndPassword(auth, username, password);
+
+        await axios.post(
+          `${import.meta.env.VITE_FIREBASE_BACKEND_URL}/api/users/register`,
+          {
+            email: username,
+            password: password,
+            name: "",
+          }
+        );
       } else {
         await signInWithEmailAndPassword(auth, username, password);
       }

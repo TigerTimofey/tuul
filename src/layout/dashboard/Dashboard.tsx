@@ -1,6 +1,7 @@
 import { CircularProgress, Typography, Box } from "@mui/material";
 import useAuth from "../../hooks/useAuth";
 import Navbar from "../Navbar/Navbar";
+import PairScooter from "../scooter/PairScooter";
 
 const Dashboard = () => {
   const { user, loading } = useAuth();
@@ -39,6 +40,7 @@ const Dashboard = () => {
           Welcome, {user.email}!
         </Typography>
       </Box>
+      <PairScooter />
     </div>
   );
 };
