@@ -38,17 +38,28 @@ const PairScooter = () => {
       // Get Firebase ID token
       const idToken = await user.getIdToken();
 
-      interface PairScooterResponse {
+      const payload = {
+        vehicleCode: pairingCode,
+        userId: user.uid,
+      };
+
+      console.log("Sending request to backend:", {
+        url: `${import.meta.env.VITE_FIREBASE_BACKEND_URL}/api/vehicles/pair`,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: idToken,
+        },
+        body: payload,
+      });
+
+      interface PairResponse {
         vehicleId: string;
         message?: string;
       }
 
-      const response = await axios.post<PairScooterResponse>(
+      const response = await axios.post<PairResponse>(
         `${import.meta.env.VITE_FIREBASE_BACKEND_URL}/api/vehicles/pair`,
-        {
-          vehicleCode: pairingCode,
-          userId: user.uid,
-        },
+        payload,
         {
           headers: {
             "Content-Type": "application/json",
