@@ -1,5 +1,4 @@
-import React from "react";
-import axios from "axios";
+import React, { useState, useEffect } from "react";
 import { Button, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import AuthInputs from "./auth-form/AuthInputs";
@@ -17,9 +16,9 @@ interface AuthFormProps {
   onToggleMode: () => void;
 }
 
-interface LoginResponse {
-  id: string;
-  message: string;
+interface MessageState {
+  text: string | null;
+  severity: "error" | "success";
 }
 
 const AuthForm: React.FC<AuthFormProps> = ({
@@ -29,12 +28,23 @@ const AuthForm: React.FC<AuthFormProps> = ({
   const navigate = useNavigate();
   const {
     formData,
+    setFormData,
     error,
     handleInputChange,
     validateForm,
-    setError,
     clearError,
   } = useAuthForm(isRegisterMode);
+
+  const [message, setMessage] = useState<MessageState>({
+    text: null,
+    severity: "error",
+  });
+
+  useEffect(() => {
+    setFormData({ username: "", password: "" });
+    setMessage({ text: null, severity: "error" });
+    clearError();
+  }, [isRegisterMode]);
 
   const handleAuthAction = async () => {
     const { username, password } = formData;
@@ -44,34 +54,23 @@ const AuthForm: React.FC<AuthFormProps> = ({
       if (isRegisterMode) {
         await createUserWithEmailAndPassword(auth, username, password);
 
-        await axios.post(
-          `${import.meta.env.VITE_FIREBASE_BACKEND_URL}/api/users/register`,
-          {
-            email: username,
-            password: password,
-            name: "",
-          }
-        );
+        setFormData({ username: "", password: "" });
+        clearError();
+
+        setMessage({
+          text: "Registration successful! You can now login.",
+          severity: "success",
+        });
       } else {
         await signInWithEmailAndPassword(auth, username, password);
-        // Log backend login response
-        const loginResponse = await axios.post<LoginResponse>(
-          `${import.meta.env.VITE_FIREBASE_BACKEND_URL}/api/users/login`,
-          {
-            email: username,
-            password: password,
-          }
-        );
-        console.log("Backend login response:", loginResponse.data);
-
-        if (loginResponse.data.id) {
-          localStorage.setItem("backendUserId", loginResponse.data.id);
-        }
+        clearError();
+        navigate("/dashboard");
       }
-      clearError();
-      navigate("/dashboard");
     } catch (err: any) {
-      setError("Failed to authenticate. Please check your Email or Password.");
+      setMessage({
+        text: "Failed to authenticate. Please check your Email or Password.",
+        severity: "error",
+      });
     }
   };
 
@@ -93,7 +92,14 @@ const AuthForm: React.FC<AuthFormProps> = ({
         handleInputChange={handleInputChange}
         isRegisterMode={false}
       />
-      <AuthErrorMessage error={error} onClose={clearError} />
+      <AuthErrorMessage
+        error={message.text || error}
+        onClose={() => {
+          setMessage({ text: null, severity: "error" });
+          clearError();
+        }}
+        severity={error ? "error" : message.severity}
+      />
       <Button
         variant="contained"
         color="primary"

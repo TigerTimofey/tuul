@@ -32,6 +32,7 @@ const useAuthForm = (_isRegisterMode: boolean) => {
 
   return {
     formData,
+    setFormData,
     error,
     handleInputChange,
     validateForm,
