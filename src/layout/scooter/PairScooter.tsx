@@ -10,22 +10,23 @@ import {
   CircularProgress,
 } from "@mui/material";
 
-const PairScooter = () => {
+interface PairScooterProps {
+  onSuccess: (vehicleId: string) => void;
+}
+
+const PairScooter: React.FC<PairScooterProps> = ({ onSuccess }) => {
   const [pairingCode, setPairingCode] = useState("");
-  const [status, setStatus] = useState<{
-    message: string;
-    type: "success" | "error";
-  } | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   const handlePairScooter = async () => {
     if (!pairingCode) {
-      setStatus({ message: "Please enter a pairing code", type: "error" });
+      setError("Please enter a pairing code");
       return;
     }
 
     setLoading(true);
-    setStatus(null);
+    setError(null);
 
     try {
       const auth = getAuth();
@@ -35,7 +36,6 @@ const PairScooter = () => {
         throw new Error("Please log in first");
       }
 
-      // Get Firebase ID token
       const idToken = await user.getIdToken();
 
       const payload = {
@@ -43,21 +43,7 @@ const PairScooter = () => {
         userId: user.uid,
       };
 
-      console.log("Sending request to backend:", {
-        url: `${import.meta.env.VITE_FIREBASE_BACKEND_URL}/api/vehicles/pair`,
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: idToken,
-        },
-        body: payload,
-      });
-
-      interface PairResponse {
-        vehicleId: string;
-        message?: string;
-      }
-
-      const response = await axios.post<PairResponse>(
+      const response = await axios.post<{ vehicleId: string }>(
         `${import.meta.env.VITE_FIREBASE_BACKEND_URL}/api/vehicles/pair`,
         payload,
         {
@@ -69,21 +55,14 @@ const PairScooter = () => {
       );
 
       if (response.data && response.data.vehicleId) {
-        setStatus({
-          message: response.data.message || "Scooter paired successfully!",
-          type: "success",
-        });
-      } else {
-        throw new Error("Invalid response from server");
+        onSuccess(response.data.vehicleId);
       }
     } catch (error: any) {
-      setStatus({
-        message:
-          error.response?.data?.message ||
+      setError(
+        error.response?.data?.message ||
           error.message ||
-          "Failed to pair scooter",
-        type: "error",
-      });
+          "Failed to pair scooter"
+      );
     } finally {
       setLoading(false);
     }
@@ -104,9 +83,9 @@ const PairScooter = () => {
         disabled={loading}
       />
 
-      {status && (
-        <Alert severity={status.type} sx={{ my: 2 }}>
-          {status.message}
+      {error && (
+        <Alert severity="error" sx={{ my: 2 }}>
+          {error}
         </Alert>
       )}
 

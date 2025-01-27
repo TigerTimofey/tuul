@@ -3,6 +3,8 @@ import useAuth from "../../hooks/useAuth";
 import Navbar from "../Navbar/Navbar";
 import PairScooter from "../scooter/PairScooter";
 
+import UserVehicleInfo from "../scooter/UserVehicleInfo";
+
 const Dashboard = () => {
   const { user, loading } = useAuth();
 
@@ -40,7 +42,12 @@ const Dashboard = () => {
           Welcome, {user.email}!
         </Typography>
       </Box>
-      <PairScooter />
+      <PairScooter
+        onSuccess={(vehicleId: string) =>
+          console.log(`Vehicle paired: ${vehicleId}`)
+        }
+      />
+      {user.email && <UserVehicleInfo userEmail={user.email} />}
     </div>
   );
 };

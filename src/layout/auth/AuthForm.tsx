@@ -17,6 +17,11 @@ interface AuthFormProps {
   onToggleMode: () => void;
 }
 
+interface LoginResponse {
+  id: string;
+  message: string;
+}
+
 const AuthForm: React.FC<AuthFormProps> = ({
   isRegisterMode,
   onToggleMode,
@@ -49,6 +54,19 @@ const AuthForm: React.FC<AuthFormProps> = ({
         );
       } else {
         await signInWithEmailAndPassword(auth, username, password);
+        // Log backend login response
+        const loginResponse = await axios.post<LoginResponse>(
+          `${import.meta.env.VITE_FIREBASE_BACKEND_URL}/api/users/login`,
+          {
+            email: username,
+            password: password,
+          }
+        );
+        console.log("Backend login response:", loginResponse.data);
+
+        if (loginResponse.data.id) {
+          localStorage.setItem("backendUserId", loginResponse.data.id);
+        }
       }
       clearError();
       navigate("/dashboard");
