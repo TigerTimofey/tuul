@@ -1,72 +1,18 @@
-import { useState } from "react";
-import { getAuth } from "firebase/auth";
-import axios from "axios";
-import {
-  Button,
-  TextField,
-  Box,
-  Typography,
-  Alert,
-  CircularProgress,
-} from "@mui/material";
+// PairScooter.tsx
+import React from "react";
+import { Box, Typography } from "@mui/material";
+import PairingCodeInput from "./components/pairing/PairingCodeInput";
+import ErrorAlert from "./hooks/error/ErrorAlert";
+import PairButton from "./components/pairing/PairButton";
+import { usePairScooter } from "./hooks/vehicle-data/usePairScooter";
 
 interface PairScooterProps {
   onSuccess: (vehicleId: string) => void;
 }
 
 const PairScooter: React.FC<PairScooterProps> = ({ onSuccess }) => {
-  const [pairingCode, setPairingCode] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
-
-  const handlePairScooter = async () => {
-    if (!pairingCode) {
-      setError("Please enter a pairing code");
-      return;
-    }
-
-    setLoading(true);
-    setError(null);
-
-    try {
-      const auth = getAuth();
-      const user = auth.currentUser;
-
-      if (!user) {
-        throw new Error("Please log in first");
-      }
-
-      const idToken = await user.getIdToken();
-
-      const payload = {
-        vehicleCode: pairingCode,
-        userId: user.uid,
-      };
-
-      const response = await axios.post<{ vehicleId: string }>(
-        `${import.meta.env.VITE_FIREBASE_BACKEND_URL}/api/vehicles/pair`,
-        payload,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: idToken,
-          },
-        }
-      );
-
-      if (response.data && response.data.vehicleId) {
-        onSuccess(response.data.vehicleId);
-      }
-    } catch (error: any) {
-      setError(
-        error.response?.data?.message ||
-          error.message ||
-          "Failed to pair scooter"
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { pairingCode, setPairingCode, error, loading, handlePairScooter } =
+    usePairScooter(onSuccess);
 
   return (
     <Box sx={{ maxWidth: 400, mx: "auto", p: 3 }}>
@@ -74,37 +20,19 @@ const PairScooter: React.FC<PairScooterProps> = ({ onSuccess }) => {
         Pair Your Scooter
       </Typography>
 
-      <TextField
-        fullWidth
+      <PairingCodeInput
         value={pairingCode}
         onChange={(e) => setPairingCode(e.target.value)}
-        placeholder="Enter scooter code"
-        margin="normal"
         disabled={loading}
       />
 
-      {error && (
-        <Alert severity="error" sx={{ my: 2 }}>
-          {error}
-        </Alert>
-      )}
+      <ErrorAlert error={error} />
 
-      <Button
-        fullWidth
-        variant="contained"
+      <PairButton
         onClick={handlePairScooter}
         disabled={loading || !pairingCode}
-        sx={{ mt: 2 }}
-      >
-        {loading ? (
-          <>
-            <CircularProgress size={24} sx={{ mr: 1 }} color="inherit" />
-            Pairing...
-          </>
-        ) : (
-          "Pair Scooter"
-        )}
-      </Button>
+        loading={loading}
+      />
     </Box>
   );
 };
