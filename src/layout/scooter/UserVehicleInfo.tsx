@@ -2,7 +2,6 @@ import React from "react";
 import { Box, Card, CardContent, Divider, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import VehicleDetails from "./components/scooter-info/VehicleDetails";
-import LoadingSpinner from "./hooks/spinner/LoadingSpinner";
 
 import { useVehicleData } from "./hooks/vehicle-data/useVehicleData";
 import ErrorAlert from "./hooks/error/ErrorAlert";
@@ -15,8 +14,7 @@ const UserVehicleInfo: React.FC<UserVehicleInfoProps> = ({ userEmail }) => {
   const { vehicle, loading, error, unpairLoading, handleUnpair } =
     useVehicleData(userEmail);
 
-  if (loading) return <LoadingSpinner />;
-
+  if (loading && !vehicle) return null;
   if (error) return <ErrorAlert error={error} />;
 
   return (
