@@ -6,6 +6,7 @@ import {
   CircularProgress,
   Box,
   Divider,
+  Button,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 
@@ -33,6 +34,7 @@ const UserVehicleInfo: React.FC<UserVehicleInfoProps> = ({ userEmail }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
+  const [unpairLoading, setUnpairLoading] = useState<boolean>(false);
 
   const fetchUserByEmail = async (userEmail: string) => {
     try {
@@ -46,6 +48,30 @@ const UserVehicleInfo: React.FC<UserVehicleInfoProps> = ({ userEmail }) => {
       setUserId(userData.id);
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
+    }
+  };
+
+  const handleUnpair = async () => {
+    if (!vehicle) return;
+
+    setUnpairLoading(true);
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/vehicles/${vehicle.id}/unpair`,
+        {
+          method: "POST",
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to unpair the scooter");
+      }
+
+      setVehicle(null); // Clear the vehicle data after successful unpairing
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An error occurred");
+    } finally {
+      setUnpairLoading(false);
     }
   };
 
@@ -155,6 +181,15 @@ const UserVehicleInfo: React.FC<UserVehicleInfoProps> = ({ userEmail }) => {
                   <Typography variant="body1">
                     <strong>Locked:</strong> {vehicle.locked ? "Yes" : "No"}
                   </Typography>
+                  <Button
+                    variant="contained"
+                    color="error"
+                    onClick={handleUnpair}
+                    disabled={unpairLoading}
+                    sx={{ mt: 2 }}
+                  >
+                    {unpairLoading ? "Unpairing..." : "Unpair Scooter"}
+                  </Button>
                 </>
               ) : (
                 <Typography variant="body2" color="textSecondary">
