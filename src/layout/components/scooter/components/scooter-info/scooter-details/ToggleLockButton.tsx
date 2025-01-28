@@ -1,19 +1,18 @@
 import React, { useState } from "react";
 import { Button, CircularProgress } from "@mui/material";
 import axios from "axios";
+import { Lock, LockOpen } from "@mui/icons-material";
 
-interface TogglePowerButtonProps {
-  isPoweredOn: boolean;
+interface ToggleLockButtonProps {
+  isLocked: boolean;
   onToggle: () => void;
   vehicleId: string;
-  disabled?: boolean;
 }
 
-const TogglePowerButton: React.FC<TogglePowerButtonProps> = ({
-  isPoweredOn,
+const ToggleLockButton: React.FC<ToggleLockButtonProps> = ({
+  isLocked,
   onToggle,
   vehicleId,
-  disabled = false,
 }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -22,13 +21,11 @@ const TogglePowerButton: React.FC<TogglePowerButtonProps> = ({
     setLoading(true);
 
     try {
-      const url = `${
-        import.meta.env.VITE_FIREBASE_BACKEND_URL
-      }/api/vehicles/${vehicleId}/power?on=${!isPoweredOn}`;
-
-      const response = await axios.post(url);
-      // console.log("Toggle Power Response:", response.data);
-
+      await axios.post(
+        `${
+          import.meta.env.VITE_FIREBASE_BACKEND_URL
+        }/api/vehicles/${vehicleId}/lock?lock=${!isLocked}`
+      );
       onToggle();
     } catch (error: any) {
       setError(error.message);
@@ -42,12 +39,13 @@ const TogglePowerButton: React.FC<TogglePowerButtonProps> = ({
       <Button
         variant="contained"
         onClick={handleToggle}
-        disabled={loading || disabled}
+        disabled={loading}
+        startIcon={isLocked ? <Lock /> : <LockOpen />}
         sx={{
-          width: "100px",
-          backgroundColor: isPoweredOn
-            ? "var(--brand--green--color)"
-            : "var(--brand--red--color)",
+          width: "120px",
+          backgroundColor: isLocked
+            ? "var(--brand--orange--color)"
+            : "var(--brand--green--color)",
           color: "var(--brand--white--color)",
           fontWeight: "bold",
           padding: "12px 24px",
@@ -58,7 +56,6 @@ const TogglePowerButton: React.FC<TogglePowerButtonProps> = ({
           "&:hover": {
             backgroundColor: "var(--brand--hover--color)",
           },
-          opacity: disabled ? 0.6 : 1,
         }}
       >
         {loading ? (
@@ -66,15 +63,15 @@ const TogglePowerButton: React.FC<TogglePowerButtonProps> = ({
             size={24}
             sx={{ color: "var(--brand--white--color)" }}
           />
-        ) : isPoweredOn ? (
-          "ON"
+        ) : isLocked ? (
+          "Locked"
         ) : (
-          "OFF"
+          "Unlocked"
         )}
       </Button>
-      {error && <p style={{ color: "red" }}>{error}</p>}{" "}
+      {error && <p style={{ color: "red" }}>{error}</p>}
     </div>
   );
 };
 
-export default TogglePowerButton;
+export default ToggleLockButton;

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Typography, Paper } from "@mui/material";
 import {
   Lock,
@@ -12,6 +12,7 @@ import Grid from "@mui/material/Grid2";
 import VehicleDetailItem from "./scooter-details/VehicleDetailItem";
 import UnpairButton from "./scooter-details/UnpairButton";
 import TogglePowerButton from "./scooter-details/TogglePowerButton";
+import ToggleLockButton from "./scooter-details/ToggleLockButton";
 
 interface Vehicle {
   vehicleCode: string;
@@ -38,9 +39,20 @@ const VehicleDetails: React.FC<VehicleDetailsProps> = ({
   unpairLoading,
 }) => {
   const [isPoweredOn, setIsPoweredOn] = useState(vehicle.poweredOn);
+  const [isLocked, setIsLocked] = useState(vehicle.locked);
+
+  // Keep local state in sync with vehicle props
+  useEffect(() => {
+    setIsLocked(vehicle.locked);
+    setIsPoweredOn(vehicle.poweredOn);
+  }, [vehicle.locked, vehicle.poweredOn]);
 
   const handleTogglePower = () => {
     setIsPoweredOn((prevState) => !prevState);
+  };
+
+  const handleToggleLock = () => {
+    setIsLocked((prevState) => !prevState);
   };
 
   return (
@@ -137,7 +149,7 @@ const VehicleDetails: React.FC<VehicleDetailsProps> = ({
           <VehicleDetailItem
             icon={<Lock sx={{ color: "var(--brand--orange--color)", mr: 1 }} />}
             label="Locked"
-            value={vehicle.locked ? "Yes" : "No"}
+            value={isLocked ? "Yes" : "No"}
           />
         </Grid>
 
@@ -155,6 +167,12 @@ const VehicleDetails: React.FC<VehicleDetailsProps> = ({
           <TogglePowerButton
             isPoweredOn={isPoweredOn}
             onToggle={handleTogglePower}
+            vehicleId={vehicle.id}
+            disabled={isLocked}
+          />
+          <ToggleLockButton
+            isLocked={isLocked}
+            onToggle={handleToggleLock}
             vehicleId={vehicle.id}
           />
         </Box>
