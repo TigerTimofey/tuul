@@ -33,14 +33,8 @@ const Dashboard = () => {
     <div>
       <Navbar userEmail={user.email} />
       <Box sx={{ mt: 4, textAlign: "center" }}>
-        <Typography
-          variant="h4"
-          sx={{ fontFamily: "Ubuntu", fontWeight: "700" }}
-        >
-          Welcome, {user.email}!
-        </Typography>
+        <UserVehicleInfo />{" "}
       </Box>
-      <UserVehicleInfo />
     </div>
   );
 };

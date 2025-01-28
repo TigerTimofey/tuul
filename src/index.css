@@ -14,6 +14,7 @@ body,
 #root {
   width: 100%;
   height: 100%;
+
   --brand--blue--color: #4f4ff7;
   --brand--blue--hover--color: #383390;
   --brand--green--color: #80d7bf;

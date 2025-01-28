@@ -1,8 +1,14 @@
 import React from "react";
-import { Box, Card, CardContent, Divider, Typography } from "@mui/material";
+import {
+  Box,
+  Card,
+  CardContent,
+  Divider,
+  Typography,
+  CircularProgress,
+} from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import VehicleDetails from "./components/scooter-info/VehicleDetails";
-
 import { useVehicleData, Vehicle } from "./hooks/vehicle-data/useVehicleData";
 import ErrorAlert from "./hooks/error/ErrorAlert";
 import PairScooter from "./PairScooter";
@@ -18,39 +24,55 @@ const UserVehicleInfo: React.FC = () => {
   } = useVehicleData();
 
   return (
-    <Box sx={{ padding: 3 }}>
-      <Grid container spacing={3}>
+    <Box sx={{ padding: 4, minHeight: "100vh" }}>
+      <Grid container spacing={4} justifyContent="center">
         <Grid gridColumn="span 12" gridRow="span 6">
-          <Card>
+          <Card
+            sx={{
+              borderRadius: 3,
+              boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+              overflow: "hidden",
+            }}
+          >
             <CardContent>
-              <Typography variant="h5" gutterBottom>
-                Vehicle Information
+              <Typography
+                variant="h4"
+                gutterBottom
+                sx={{ fontWeight: "bold", textAlign: "center" }}
+              >
+                🛴 Vehicle Information
               </Typography>
-              <Divider />
-              {error && <ErrorAlert error={error} />}
-              {vehicle ? (
+              <Divider sx={{ marginY: 2 }} />
+
+              {error && (
+                <Box sx={{ marginBottom: 2 }}>
+                  <ErrorAlert error={error} />
+                </Box>
+              )}
+
+              {loading ? (
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: "150px",
+                  }}
+                >
+                  <CircularProgress />
+                </Box>
+              ) : vehicle ? (
                 <VehicleDetails
                   vehicle={vehicle}
                   onUnpair={handleUnpair}
                   unpairLoading={unpairLoading}
                 />
               ) : (
-                <>
-                  <Typography
-                    variant="body2"
-                    color="textSecondary"
-                    sx={{ mb: 2 }}
-                  >
-                    {loading
-                      ? "Loading vehicle information..."
-                      : "No active vehicle found. You can pair a new scooter below."}
-                  </Typography>
-                  <PairScooter
-                    onSuccess={(vehicle: Vehicle) => {
-                      setVehicleDirectly(vehicle);
-                    }}
-                  />
-                </>
+                <PairScooter
+                  onSuccess={(vehicle: Vehicle) => {
+                    setVehicleDirectly(vehicle);
+                  }}
+                />
               )}
             </CardContent>
           </Card>
