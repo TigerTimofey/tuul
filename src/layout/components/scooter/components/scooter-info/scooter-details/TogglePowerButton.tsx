@@ -25,7 +25,7 @@ const TogglePowerButton: React.FC<TogglePowerButtonProps> = ({
       }/api/vehicles/${vehicleId}/power?on=${!isPoweredOn}`;
 
       const response = await axios.post(url);
-      console.log("Toggle Power Response:", response.data);
+      // console.log("Toggle Power Response:", response.data);
 
       onToggle();
     } catch (error: any) {

@@ -1,18 +1,27 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, Typography, CardContent } from "@mui/material";
 import PairingCodeInput from "./components/scooter-info/pairing/PairingCodeInput";
 import ErrorAlert from "./hooks/error/ErrorAlert";
 import PairButton from "./components/scooter-info/pairing/PairButton";
 import { usePairScooter } from "./hooks/vehicle-data/usePairScooter";
 import { Vehicle } from "./hooks/vehicle-data/useVehicleData";
+import { usePairing } from "../../../context/PairingContext";
 
 interface PairScooterProps {
   onSuccess: (vehicleData: Vehicle) => void;
 }
 
 const PairScooter: React.FC<PairScooterProps> = ({ onSuccess }) => {
+  const { selectedCode } = usePairing();
   const { pairingCode, setPairingCode, error, loading, handlePairScooter } =
     usePairScooter(onSuccess);
+
+  // Update pairingCode when selectedCode changes
+  useEffect(() => {
+    if (selectedCode) {
+      setPairingCode(selectedCode);
+    }
+  }, [selectedCode, setPairingCode]);
 
   return (
     <Box

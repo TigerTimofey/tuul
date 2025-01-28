@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { GoogleMap, Marker } from "@react-google-maps/api";
 import useLocation from "../../../../../hooks/useLocation";
 import { useScooters } from "../../../../../hooks/useScooters";
+import { usePairing } from "../../../../../context/PairingContext";
 
 interface MapProps {
   height?: string;
@@ -15,6 +16,7 @@ const Map = ({ height = "400px" }: MapProps) => {
     error: locationError,
   } = useLocation();
   const { scooters, error: scootersError } = useScooters();
+  const { setSelectedCode } = usePairing();
   const [mapCenter, setMapCenter] = useState({ lat: 0, lng: 0 });
   const [markerPosition, setMarkerPosition] =
     useState<google.maps.LatLngLiteral | null>(null);
@@ -50,6 +52,10 @@ const Map = ({ height = "400px" }: MapProps) => {
     strokeColor: "#ffffff",
     strokeWeight: 2,
     labelOrigin: new google.maps.Point(0, -4),
+  };
+
+  const handleMarkerClick = (vehicleCode: string) => {
+    setSelectedCode(vehicleCode);
   };
 
   return (
@@ -93,6 +99,7 @@ const Map = ({ height = "400px" }: MapProps) => {
               fontWeight: "bold",
               className: "marker-label",
             }}
+            onClick={() => handleMarkerClick(scooter.vehicleCode)}
           />
         ))}
       </GoogleMap>
