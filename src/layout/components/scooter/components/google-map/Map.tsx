@@ -3,6 +3,7 @@ import { GoogleMap, Marker } from "@react-google-maps/api";
 import useLocation from "../../../../../hooks/useLocation";
 import { useScooters } from "../../../../../hooks/useScooters";
 import { usePairing } from "../../../../../context/PairingContext";
+import scooterSvg from "../../../../../assets/images/scooter.svg";
 
 interface MapProps {
   height?: string;
@@ -45,13 +46,10 @@ const Map = ({ height = "400px" }: MapProps) => {
   }
 
   const scooterIcon = {
-    path: google.maps.SymbolPath.CIRCLE,
-    scale: 8,
-    fillColor: "#FF0000",
-    fillOpacity: 1,
-    strokeColor: "#ffffff",
-    strokeWeight: 2,
-    labelOrigin: new google.maps.Point(0, -4),
+    url: scooterSvg,
+    scaledSize: new google.maps.Size(32, 32),
+    anchor: new google.maps.Point(16, 32),
+    labelOrigin: new google.maps.Point(16, -10),
   };
 
   const handleMarkerClick = (vehicleCode: string) => {
