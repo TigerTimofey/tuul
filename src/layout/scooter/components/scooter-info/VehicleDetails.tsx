@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box, Typography, Paper } from "@mui/material";
 import {
   Lock,
@@ -11,6 +11,7 @@ import {
 import Grid from "@mui/material/Grid2";
 import VehicleDetailItem from "./scooter-details/VehicleDetailItem";
 import UnpairButton from "./scooter-details/UnpairButton";
+import TogglePowerButton from "./scooter-details/TogglePowerButton";
 
 interface Vehicle {
   vehicleCode: string;
@@ -22,6 +23,7 @@ interface Vehicle {
   estimatedRange: number;
   odometer: number;
   locked: boolean;
+  id: string;
 }
 
 interface VehicleDetailsProps {
@@ -35,6 +37,12 @@ const VehicleDetails: React.FC<VehicleDetailsProps> = ({
   onUnpair,
   unpairLoading,
 }) => {
+  const [isPoweredOn, setIsPoweredOn] = useState(vehicle.poweredOn);
+
+  const handleTogglePower = () => {
+    setIsPoweredOn((prevState) => !prevState);
+  };
+
   return (
     <Box
       sx={{
@@ -66,21 +74,18 @@ const VehicleDetails: React.FC<VehicleDetailsProps> = ({
         </Typography>
 
         <Grid container columns={12} spacing={4}>
-          {/* Vehicle Code */}
           <VehicleDetailItem
             icon={<Build sx={{ color: "var(--brand--blue--color)", mr: 1 }} />}
             label="Vehicle Code"
             value={vehicle.vehicleCode}
           />
 
-          {/* Status */}
           <VehicleDetailItem
             icon={<Speed sx={{ color: "var(--brand--blue--color)", mr: 1 }} />}
             label="Status"
             value={vehicle.status}
           />
 
-          {/* State of Charge */}
           <VehicleDetailItem
             icon={
               <BatteryFull
@@ -91,7 +96,6 @@ const VehicleDetails: React.FC<VehicleDetailsProps> = ({
             value={`${vehicle.stateOfCharge}%`}
           />
 
-          {/* Latitude */}
           <VehicleDetailItem
             icon={
               <LocationOn
@@ -102,7 +106,6 @@ const VehicleDetails: React.FC<VehicleDetailsProps> = ({
             value={vehicle.latitude}
           />
 
-          {/* Longitude */}
           <VehicleDetailItem
             icon={
               <LocationOn
@@ -113,28 +116,24 @@ const VehicleDetails: React.FC<VehicleDetailsProps> = ({
             value={vehicle.longitude}
           />
 
-          {/* Powered On */}
           <VehicleDetailItem
             icon={<Power sx={{ color: "var(--brand--green--color)", mr: 1 }} />}
             label="Powered On"
-            value={vehicle.poweredOn ? "Yes" : "No"}
+            value={isPoweredOn ? "Yes" : "No"}
           />
 
-          {/* Estimated Range */}
           <VehicleDetailItem
             icon={<Speed sx={{ color: "var(--brand--green--color)", mr: 1 }} />}
             label="Estimated Range"
             value={`${vehicle.estimatedRange} km`}
           />
 
-          {/* Odometer */}
           <VehicleDetailItem
             icon={<Speed sx={{ color: "var(--brand--green--color)", mr: 1 }} />}
             label="Odometer"
             value={`${vehicle.odometer} km`}
           />
 
-          {/* Locked */}
           <VehicleDetailItem
             icon={<Lock sx={{ color: "var(--brand--orange--color)", mr: 1 }} />}
             label="Locked"
@@ -142,9 +141,13 @@ const VehicleDetails: React.FC<VehicleDetailsProps> = ({
           />
         </Grid>
 
-        {/* Unpair Button */}
-        <Box textAlign="center" mt={4}>
+        <Box textAlign="center" mt={4} sx={{ display: "flex", gap: 2 }}>
           <UnpairButton onClick={onUnpair} loading={unpairLoading} />
+          <TogglePowerButton
+            isPoweredOn={isPoweredOn}
+            onToggle={handleTogglePower}
+            vehicleId={vehicle.id}
+          />
         </Box>
       </Paper>
     </Box>
