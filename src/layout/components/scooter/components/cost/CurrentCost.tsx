@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Typography, Box } from "@mui/material";
+import { Typography, Box, CircularProgress } from "@mui/material";
 
 interface CurrentCostProps {
   vehicleId?: string;
@@ -33,8 +33,6 @@ const CurrentCost: React.FC<CurrentCostProps> = ({ vehicleId }) => {
         }
 
         const data = await response.json();
-        // console.log("Cost data received:", data);
-        //TODO: Add sockets to update cost in real-time
         setCost(data.cost);
         setError(null);
       } catch (err: any) {
@@ -52,28 +50,85 @@ const CurrentCost: React.FC<CurrentCostProps> = ({ vehicleId }) => {
   if (!vehicleId) {
     return (
       <Box sx={{ textAlign: "center", mt: 2 }}>
-        <Typography variant="h6" sx={{ mb: 1 }}>
-          Current Cost
+        <Typography
+          variant="h6"
+          sx={{ mb: 1, color: "var(--brand--blue--color)" }}
+        >
+          Ride Cost
         </Typography>
-        <Typography>No vehicle selected</Typography>
+        <Typography sx={{ color: "var(--brand--gray--color)" }}>
+          No vehicle selected
+        </Typography>
       </Box>
     );
   }
 
   return (
-    <Box sx={{ textAlign: "center", mt: 2 }}>
-      <Typography variant="h6" sx={{ mb: 1 }}>
-        Current Cost
-      </Typography>
-      {error ? (
-        <Typography color="error">{error}</Typography>
-      ) : cost !== null ? (
-        <Typography>
-          <strong>{`$${cost.toFixed(2)}`}</strong>
-        </Typography>
-      ) : (
-        <Typography>Fetching cost...</Typography>
-      )}
+    <Box
+      sx={{
+        position: "fixed",
+        width: "100%",
+        backgroundColor: "var(--brand--green--color)",
+
+        boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+        zIndex: 1000,
+        borderBottom: "2px solid var(--brand--gray--color)",
+        padding: "16px",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        transition: "all 0.3s ease-in-out",
+        "@media (max-width: 600px)": {
+          bottom: 0,
+          left: 0,
+          flexDirection: "row",
+          padding: "8px 16px",
+          justifyContent: "center",
+        },
+        "@media (min-width: 601px)": {
+          bottom: 0,
+          left: 0,
+          flexDirection: "row",
+          justifyContent: "center",
+        },
+      }}
+    >
+      <Box
+        sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
+      >
+        {error ? (
+          <Typography sx={{ color: "var(--brand--red--color)" }}>
+            {error}
+          </Typography>
+        ) : cost !== null ? (
+          <>
+            <Typography
+              variant="h6"
+              fontWeight={800}
+              sx={{
+                color: "var(--brand--dark--green--color)",
+                marginRight: "16px",
+                "@media (max-width: 600px)": {
+                  marginRight: "8px",
+                },
+              }}
+            >
+              Ride Cost
+            </Typography>
+            <Typography
+              variant="h6"
+              sx={{
+                color: "var(--brand--dark--green--color)",
+                fontWeight: "bold",
+              }}
+            >
+              {`${cost.toFixed(2)} €`}
+            </Typography>
+          </>
+        ) : (
+          <CircularProgress sx={{ color: "var(--brand--blue--color)" }} />
+        )}
+      </Box>
     </Box>
   );
 };
