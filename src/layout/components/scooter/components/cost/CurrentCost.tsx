@@ -10,10 +10,7 @@ const CurrentCost: React.FC<CurrentCostProps> = ({ vehicleId }) => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    console.log("CurrentCost vehicleId:", vehicleId);
-
     if (!vehicleId) {
-      console.log("No vehicleId provided");
       setError("No vehicle selected");
       return;
     }
@@ -46,22 +43,6 @@ const CurrentCost: React.FC<CurrentCostProps> = ({ vehicleId }) => {
 
     return () => clearInterval(intervalId);
   }, [vehicleId]);
-
-  if (!vehicleId) {
-    return (
-      <Box sx={{ textAlign: "center", mt: 2 }}>
-        <Typography
-          variant="h6"
-          sx={{ mb: 1, color: "var(--brand--blue--color)" }}
-        >
-          Ride Cost
-        </Typography>
-        <Typography sx={{ color: "var(--brand--gray--color)" }}>
-          No vehicle selected
-        </Typography>
-      </Box>
-    );
-  }
 
   return (
     <Box
@@ -97,7 +78,13 @@ const CurrentCost: React.FC<CurrentCostProps> = ({ vehicleId }) => {
         sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
       >
         {error ? (
-          <Typography sx={{ color: "var(--brand--red--color)" }}>
+          <Typography
+            variant="h6"
+            sx={{
+              color: "var(--brand--dark--green--color)",
+              fontWeight: "bold",
+            }}
+          >
             {error}
           </Typography>
         ) : cost !== null ? (
