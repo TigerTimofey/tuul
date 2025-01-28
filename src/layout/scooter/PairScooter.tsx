@@ -6,8 +6,10 @@ import ErrorAlert from "./hooks/error/ErrorAlert";
 import PairButton from "./components/pairing/PairButton";
 import { usePairScooter } from "./hooks/vehicle-data/usePairScooter";
 
+import { Vehicle } from "./hooks/vehicle-data/useVehicleData";
+
 interface PairScooterProps {
-  onSuccess: (vehicleId: string) => void;
+  onSuccess: (vehicleData: Vehicle) => void;
 }
 
 const PairScooter: React.FC<PairScooterProps> = ({ onSuccess }) => {

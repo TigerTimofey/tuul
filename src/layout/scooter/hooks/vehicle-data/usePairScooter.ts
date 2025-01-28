@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { getAuth } from "firebase/auth";
 import axios from "axios";
+import { Vehicle } from "./useVehicleData";
 
 interface UsePairScooterReturn {
   pairingCode: string;
@@ -12,7 +13,7 @@ interface UsePairScooterReturn {
 }
 
 export const usePairScooter = (
-  onSuccess: (vehicleId: string) => void
+  onSuccess: (vehicleData: Vehicle) => void
 ): UsePairScooterReturn => {
   const [pairingCode, setPairingCode] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -42,7 +43,7 @@ export const usePairScooter = (
         userId: user.uid,
       };
 
-      const response = await axios.post<{ vehicleId: string }>(
+      const response = await axios.post<Vehicle>(
         `${import.meta.env.VITE_FIREBASE_BACKEND_URL}/api/vehicles/pair`,
         payload,
         {
@@ -53,8 +54,10 @@ export const usePairScooter = (
         }
       );
 
-      if (response.data && response.data.vehicleId) {
-        onSuccess(response.data.vehicleId);
+      console.log("Pairing Response:", response.data);
+
+      if (response.data) {
+        onSuccess(response.data); // Pass the full vehicle data
       }
     } catch (error: any) {
       setError(

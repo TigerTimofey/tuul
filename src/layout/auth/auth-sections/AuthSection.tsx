@@ -38,7 +38,7 @@ const AuthSection: React.FC<AuthSectionProps> = ({
     >
       <div className={animationClass}>
         <AuthForm
-          onFormSubmit={onFormSubmit}
+          // onFormSubmit={onFormSubmit}
           isRegisterMode={isRegisterMode}
           onToggleMode={handleToggleMode}
         />

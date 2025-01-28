@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
+import { getAuth, onAuthStateChanged } from "firebase/auth"; // Add onAuthStateChanged
 
-interface Vehicle {
+export interface Vehicle {
   id: string;
   vehicleCode: string;
   userId: string | null;
@@ -15,25 +16,36 @@ interface Vehicle {
   locked: boolean;
 }
 
-export const useVehicleData = (userEmail: string) => {
+export const useVehicleData = () => {
   const [vehicle, setVehicle] = useState<Vehicle | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
   const [unpairLoading, setUnpairLoading] = useState<boolean>(false);
 
+  const setVehicleDirectly = (vehicleData: Vehicle) => {
+    setVehicle(vehicleData);
+  };
+
   const fetchUserByEmail = async (email: string) => {
     try {
       const response = await fetch(
         `http://localhost:8080/api/users/by-email/${email}`
       );
+
       if (!response.ok) {
-        throw new Error("Failed to fetch user data");
+        setLoading(false);
+        return;
       }
+
       const userData = await response.json();
-      setUserId(userData.id);
+      if (userData && userData.id) {
+        setUserId(userData.id);
+      } else {
+        setLoading(false);
+      }
     } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
+      setLoading(false);
     }
   };
 
@@ -86,10 +98,20 @@ export const useVehicleData = (userEmail: string) => {
   };
 
   useEffect(() => {
-    if (userEmail) {
-      fetchUserByEmail(userEmail);
-    }
-  }, [userEmail]);
+    const auth = getAuth();
+
+    // Use onAuthStateChanged instead of direct currentUser check
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user?.email) {
+        fetchUserByEmail(user.email);
+      } else {
+        setLoading(false);
+      }
+    });
+
+    // Cleanup subscription
+    return () => unsubscribe();
+  }, []);
 
   useEffect(() => {
     if (userId) {
@@ -97,5 +119,12 @@ export const useVehicleData = (userEmail: string) => {
     }
   }, [userId]);
 
-  return { vehicle, loading, error, unpairLoading, handleUnpair };
+  return {
+    vehicle,
+    loading,
+    error,
+    unpairLoading,
+    handleUnpair,
+    setVehicleDirectly,
+  };
 };
