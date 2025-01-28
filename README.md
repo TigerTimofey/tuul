@@ -2,6 +2,7 @@
 
 ## Table of Contents
 
+- [Video Demonstration](#video-demonstration)
 - [Features](#features)
   - [Core Functionality](#core-functionality)
   - [Location & Status](#location--status)
@@ -10,16 +11,14 @@
   - [Prerequisites](#prerequisites)
   - [Environment Setup](#environment-setup)
   - [Installation](#installation)
-- [Project Structure](#project-structure)
-- [Features in Detail](#features-in-detail)
-  - [Authentication](#authentication)
-  - [Scooter Management](#scooter-management)
-  - [Location Tracking](#location-tracking)
-  - [Status Monitoring](#status-monitoring)
-- [Contributing](#contributing)
 - [Contributor](#contributors)
 
 A React-based web application for managing and controlling shared electric scooters. This application provides a seamless interface for users to authenticate, pair with scooters, and control their operations.
+
+## Video Demonstration 
+
+https://github.com/user-attachments/assets/5db648df-6fb1-4be9-8f63-d39da1e6d9f4
+
 
 ## Features
 
@@ -68,6 +67,34 @@ A React-based web application for managing and controlling shared electric scoot
 - npm or yarn
 - Firebase account
 - Google Maps API key
+
+### Installation
+
+## Running the Application
+
+1. Clone the repository
+
+```bash
+git clone https://github.com/TigerTimofey/tuul
+```
+
+2. Move inside folder
+
+```bash
+cd tuul-rent
+```
+
+3. Build the project
+
+```bash
+npm install
+```
+
+3. Run the application
+
+```bash
+npm run dev
+```
 
 ### Environment Setup
 
