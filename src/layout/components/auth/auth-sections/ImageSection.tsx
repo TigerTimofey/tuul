@@ -1,7 +1,7 @@
 import React from "react";
 import { Box } from "@mui/material";
-import loginPng from "../../../assets/images/login.png";
-import logo from "../../../assets/images/logo.png";
+import loginPng from "../../../../assets/images/login.png";
+import logo from "../../../../assets/images/logo.png";
 
 interface ImageSectionProps {
   isRegisterMode: boolean;

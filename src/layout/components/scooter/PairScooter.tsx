@@ -1,8 +1,8 @@
 import React from "react";
 import { Box, Typography, CardContent } from "@mui/material";
-import PairingCodeInput from "./components/pairing/PairingCodeInput";
+import PairingCodeInput from "./components/scooter-info/pairing/PairingCodeInput";
 import ErrorAlert from "./hooks/error/ErrorAlert";
-import PairButton from "./components/pairing/PairButton";
+import PairButton from "./components/scooter-info/pairing/PairButton";
 import { usePairScooter } from "./hooks/vehicle-data/usePairScooter";
 import { Vehicle } from "./hooks/vehicle-data/useVehicleData";
 

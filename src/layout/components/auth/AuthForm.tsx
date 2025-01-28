@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import { Button, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import AuthInputs from "./auth-form/AuthInputs";
-import { auth } from "../../config/firebase";
+import { auth } from "../../../config/firebase";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import AuthErrorMessage from "./auth-form/AuthErrorMessage";
-import useAuthForm from "../../hooks/useAuthForm";
+import useAuthForm from "../../../hooks/useAuthForm";
 import AuthToggleLink from "./auth-form/AuthToggleLink";
 
 interface AuthFormProps {

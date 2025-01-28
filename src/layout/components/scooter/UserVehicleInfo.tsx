@@ -24,7 +24,7 @@ const UserVehicleInfo: React.FC = () => {
   } = useVehicleData();
 
   return (
-    <Box sx={{ padding: 4, minHeight: "100vh" }}>
+    <Box sx={{ padding: 4 }}>
       <Grid container spacing={4} justifyContent="center">
         <Grid gridColumn="span 12" gridRow="span 6">
           <Card
