@@ -1,13 +1,20 @@
 import { useEffect, useState } from "react";
 import { GoogleMap, Marker } from "@react-google-maps/api";
 import useLocation from "../../../../../hooks/useLocation";
+import { useScooters } from "../../../../../hooks/useScooters";
 
 interface MapProps {
   height?: string;
 }
 
 const Map = ({ height = "400px" }: MapProps) => {
-  const { latitude, longitude, fetchLocation, error } = useLocation();
+  const {
+    latitude,
+    longitude,
+    fetchLocation,
+    error: locationError,
+  } = useLocation();
+  const { scooters, error: scootersError } = useScooters();
   const [mapCenter, setMapCenter] = useState({ lat: 0, lng: 0 });
   const [markerPosition, setMarkerPosition] =
     useState<google.maps.LatLngLiteral | null>(null);
@@ -27,9 +34,22 @@ const Map = ({ height = "400px" }: MapProps) => {
     }
   }, [latitude, longitude]);
 
-  if (error) {
-    return <div>{error}</div>;
+  if (locationError) {
+    return <div>{locationError}</div>;
   }
+
+  if (scootersError) {
+    return <div>{scootersError}</div>;
+  }
+
+  const scooterIcon = {
+    path: google.maps.SymbolPath.CIRCLE,
+    scale: 8,
+    fillColor: "#FF0000",
+    fillOpacity: 1,
+    strokeColor: "#ffffff",
+    strokeWeight: 2,
+  };
 
   return (
     <div style={{ height: height, width: "100%" }}>
@@ -55,6 +75,18 @@ const Map = ({ height = "400px" }: MapProps) => {
             }}
           />
         )}
+
+        {scooters.map((scooter) => (
+          <Marker
+            key={scooter.id}
+            position={{
+              lat: scooter.latitude,
+              lng: scooter.longitude,
+            }}
+            title={`Scooter ${scooter.vehicleCode}`}
+            icon={scooterIcon}
+          />
+        ))}
       </GoogleMap>
     </div>
   );
