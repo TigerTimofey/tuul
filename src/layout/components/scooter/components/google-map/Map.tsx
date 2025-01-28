@@ -49,6 +49,7 @@ const Map = ({ height = "400px" }: MapProps) => {
     fillOpacity: 1,
     strokeColor: "#ffffff",
     strokeWeight: 2,
+    labelOrigin: new google.maps.Point(0, -4),
   };
 
   return (
@@ -85,6 +86,13 @@ const Map = ({ height = "400px" }: MapProps) => {
             }}
             title={`Scooter ${scooter.vehicleCode}`}
             icon={scooterIcon}
+            label={{
+              text: scooter.vehicleCode,
+              color: "#FFFFFF",
+              fontSize: "14px",
+              fontWeight: "bold",
+              className: "marker-label",
+            }}
           />
         ))}
       </GoogleMap>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getAuth, onAuthStateChanged } from "firebase/auth"; // Add onAuthStateChanged
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 export interface Vehicle {
   id: string;
