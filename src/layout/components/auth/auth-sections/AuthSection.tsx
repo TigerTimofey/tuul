@@ -12,7 +12,6 @@ interface AuthSectionProps {
 const AuthSection: React.FC<AuthSectionProps> = ({
   isRegisterMode,
   onToggleMode,
-  onFormSubmit,
 }) => {
   const [animationClass, setAnimationClass] = useState(
     "animate__animated animate__fadeIn"
@@ -38,7 +37,6 @@ const AuthSection: React.FC<AuthSectionProps> = ({
     >
       <div className={animationClass}>
         <AuthForm
-          // onFormSubmit={onFormSubmit}
           isRegisterMode={isRegisterMode}
           onToggleMode={handleToggleMode}
         />

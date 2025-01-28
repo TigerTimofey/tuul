@@ -1,4 +1,3 @@
-// usePairScooter.ts
 import { useState } from "react";
 import { getAuth } from "firebase/auth";
 import axios from "axios";
