@@ -23,8 +23,8 @@ export const useVehicleData = () => {
   const [userId, setUserId] = useState<string | null>(null);
   const [unpairLoading, setUnpairLoading] = useState<boolean>(false);
 
-  const setVehicleDirectly = (vehicleData: Vehicle) => {
-    setVehicle(vehicleData);
+  const setVehicleDirectly = (newVehicle: Vehicle | null) => {
+    setVehicle(newVehicle);
   };
 
   const fetchUserByEmail = async (email: string) => {
@@ -84,11 +84,22 @@ export const useVehicleData = () => {
     if (!vehicle) return;
     setUnpairLoading(true);
     try {
+      const auth = getAuth();
+      const user = auth.currentUser;
+      if (!user) throw new Error("User not authenticated");
+
+      const idToken = await user.getIdToken();
       const response = await fetch(
         `${import.meta.env.VITE_FIREBASE_BACKEND_URL}/api/vehicles/${
           vehicle.id
         }/unpair`,
-        { method: "POST" }
+        {
+          method: "POST",
+          headers: {
+            Authorization: idToken,
+            "Content-Type": "application/json",
+          },
+        }
       );
 
       if (!response.ok) {
@@ -96,8 +107,10 @@ export const useVehicleData = () => {
       }
 
       setVehicle(null);
+      return true;
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
+      return false;
     } finally {
       setUnpairLoading(false);
     }

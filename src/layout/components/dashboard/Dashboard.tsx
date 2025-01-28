@@ -6,10 +6,26 @@ import Grid from "@mui/material/Grid2";
 import LocationInfo from "../location/LocationInfo";
 import CurrentCost from "../scooter/components/cost/CurrentCost";
 import { useVehicleData } from "../scooter/hooks/vehicle-data/useVehicleData";
+import { useState, useEffect } from "react";
+import { Vehicle } from "../scooter/hooks/vehicle-data/useVehicleData";
 
 const Dashboard = () => {
   const { user, loading } = useAuth();
-  const { vehicle, loading: vehicleLoading } = useVehicleData();
+  const {
+    vehicle,
+    loading: vehicleLoading,
+    setVehicleDirectly,
+  } = useVehicleData();
+  const [currentVehicle, setCurrentVehicle] = useState(vehicle);
+
+  useEffect(() => {
+    setCurrentVehicle(vehicle);
+  }, [vehicle]);
+
+  const handlePairingSuccess = (newVehicle: Vehicle | null) => {
+    setCurrentVehicle(newVehicle);
+    setVehicleDirectly(newVehicle);
+  };
 
   if (loading) {
     return (
@@ -41,7 +57,7 @@ const Dashboard = () => {
         {" "}
         <Grid container spacing={4} justifyContent="center">
           <Grid gridColumn="span 12" gridRow="span 6">
-            <UserVehicleInfo />{" "}
+            <UserVehicleInfo onPairingSuccess={handlePairingSuccess} />{" "}
           </Grid>
           <Grid gridColumn="span 12" gridRow="span 6">
             <LocationInfo />{" "}
@@ -50,7 +66,7 @@ const Dashboard = () => {
             {vehicleLoading ? (
               <CircularProgress />
             ) : (
-              <CurrentCost vehicleId={vehicle?.id} />
+              <CurrentCost vehicleId={currentVehicle?.id} />
             )}
           </Grid>
         </Grid>

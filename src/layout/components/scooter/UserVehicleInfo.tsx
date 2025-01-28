@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Card,
@@ -13,15 +13,29 @@ import { useVehicleData, Vehicle } from "./hooks/vehicle-data/useVehicleData";
 import ErrorAlert from "./hooks/error/ErrorAlert";
 import PairScooter from "./PairScooter";
 
-const UserVehicleInfo: React.FC = () => {
-  const {
-    vehicle,
-    loading,
-    error,
-    unpairLoading,
-    handleUnpair,
-    setVehicleDirectly,
-  } = useVehicleData();
+interface UserVehicleInfoProps {
+  onPairingSuccess: (vehicle: Vehicle | null) => void;
+}
+
+const UserVehicleInfo: React.FC<UserVehicleInfoProps> = ({
+  onPairingSuccess,
+}) => {
+  const [pairedVehicle, setPairedVehicle] = useState<Vehicle | null>(null);
+  const { vehicle, loading, error, unpairLoading, handleUnpair } =
+    useVehicleData();
+
+  const handleSuccess = (newVehicle: Vehicle) => {
+    setPairedVehicle(newVehicle);
+    onPairingSuccess(newVehicle);
+  };
+
+  const handleUnpairSuccess = async () => {
+    await handleUnpair();
+    setPairedVehicle(null);
+    onPairingSuccess(null); // Notify parent component about unpair
+  };
+
+  const activeVehicle = pairedVehicle || vehicle;
 
   return (
     <Box sx={{ padding: 4 }}>
@@ -61,18 +75,14 @@ const UserVehicleInfo: React.FC = () => {
                 >
                   <CircularProgress />
                 </Box>
-              ) : vehicle ? (
+              ) : activeVehicle ? (
                 <VehicleDetails
-                  vehicle={vehicle}
-                  onUnpair={handleUnpair}
+                  vehicle={activeVehicle}
+                  onUnpair={handleUnpairSuccess}
                   unpairLoading={unpairLoading}
                 />
               ) : (
-                <PairScooter
-                  onSuccess={(vehicle: Vehicle) => {
-                    setVehicleDirectly(vehicle);
-                  }}
-                />
+                <PairScooter onSuccess={handleSuccess} />
               )}
             </CardContent>
           </Card>

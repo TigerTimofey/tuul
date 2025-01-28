@@ -57,6 +57,7 @@ export const usePairScooter = (
       console.log("Pairing Response:", response.data);
 
       if (response.data) {
+        // Immediately update the vehicle data
         onSuccess(response.data); // Pass the full vehicle data
       }
     } catch (error: any) {
