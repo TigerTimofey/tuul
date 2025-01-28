@@ -68,7 +68,7 @@ const AuthForm: React.FC<AuthFormProps> = ({
       }
     } catch (err: any) {
       setMessage({
-        text: "Failed to authenticate. Please check your Email or Password.",
+        text: "Please check your Email or Password.",
         severity: "error",
       });
     }

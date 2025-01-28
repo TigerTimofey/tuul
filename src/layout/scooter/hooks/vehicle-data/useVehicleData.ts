@@ -30,7 +30,9 @@ export const useVehicleData = () => {
   const fetchUserByEmail = async (email: string) => {
     try {
       const response = await fetch(
-        `http://localhost:8080/api/users/by-email/${email}`
+        `${
+          import.meta.env.VITE_FIREBASE_BACKEND_URL
+        }/api/users/by-email/${email}`
       );
 
       if (!response.ok) {
@@ -52,7 +54,7 @@ export const useVehicleData = () => {
   const fetchVehicleData = async (userId: string) => {
     try {
       const userResponse = await fetch(
-        `http://localhost:8080/api/users/${userId}`
+        `${import.meta.env.VITE_FIREBASE_BACKEND_URL}/api/users/${userId}`
       );
       if (!userResponse.ok) {
         throw new Error("Failed to fetch user data");
@@ -61,7 +63,9 @@ export const useVehicleData = () => {
 
       if (userData?.activeVehicleId) {
         const vehicleResponse = await fetch(
-          `http://localhost:8080/api/vehicles/${userData.activeVehicleId}`
+          `${import.meta.env.VITE_FIREBASE_BACKEND_URL}/api/vehicles/${
+            userData.activeVehicleId
+          }`
         );
         if (!vehicleResponse.ok) {
           throw new Error("Failed to fetch vehicle data");
@@ -81,7 +85,9 @@ export const useVehicleData = () => {
     setUnpairLoading(true);
     try {
       const response = await fetch(
-        `http://localhost:8080/api/vehicles/${vehicle.id}/unpair`,
+        `${import.meta.env.VITE_FIREBASE_BACKEND_URL}/api/vehicles/${
+          vehicle.id
+        }/unpair`,
         { method: "POST" }
       );
 
@@ -100,7 +106,6 @@ export const useVehicleData = () => {
   useEffect(() => {
     const auth = getAuth();
 
-    // Use onAuthStateChanged instead of direct currentUser check
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user?.email) {
         fetchUserByEmail(user.email);
@@ -109,7 +114,6 @@ export const useVehicleData = () => {
       }
     });
 
-    // Cleanup subscription
     return () => unsubscribe();
   }, []);
 
