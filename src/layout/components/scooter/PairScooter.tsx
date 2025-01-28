@@ -19,17 +19,17 @@ const PairScooter: React.FC<PairScooterProps> = ({ onSuccess }) => {
       sx={{
         maxWidth: 500,
         mx: "auto",
-        py: 4,
+        py: 1,
         px: 2,
       }}
     >
-      <CardContent sx={{ p: 4 }}>
+      <CardContent sx={{ p: 1 }}>
         <Typography
-          variant="h4"
+          variant="h5"
           sx={{
             textAlign: "center",
             fontWeight: "bold",
-            marginBottom: 2,
+            marginBottom: 1,
           }}
         >
           Pair Scooter
@@ -39,7 +39,7 @@ const PairScooter: React.FC<PairScooterProps> = ({ onSuccess }) => {
           color="textSecondary"
           sx={{
             textAlign: "center",
-            marginBottom: 3,
+            marginBottom: 1,
           }}
         >
           Enter the pairing code provided with your scooter to connect.
@@ -57,7 +57,7 @@ const PairScooter: React.FC<PairScooterProps> = ({ onSuccess }) => {
           </Box>
         )}
 
-        <Box sx={{ mt: 3, display: "flex", justifyContent: "center" }}>
+        <Box sx={{ mt: 1, display: "flex", justifyContent: "center" }}>
           <PairButton
             onClick={handlePairScooter}
             disabled={loading || !pairingCode}

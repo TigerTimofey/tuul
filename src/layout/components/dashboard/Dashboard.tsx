@@ -4,10 +4,11 @@ import Navbar from "../Navbar/Navbar";
 import UserVehicleInfo from "../scooter/UserVehicleInfo";
 import Grid from "@mui/material/Grid2";
 import LocationInfo from "../location/LocationInfo";
-import CurrentCost from "../scooter/components/cost/CurrentCost";
+import Footer from "../footer/Footer";
 import { useVehicleData } from "../scooter/hooks/vehicle-data/useVehicleData";
 import { useState, useEffect } from "react";
 import { Vehicle } from "../scooter/hooks/vehicle-data/useVehicleData";
+import MapWrapper from "../scooter/components/google-map/MapWrapper";
 
 const Dashboard = () => {
   const { user, loading } = useAuth();
@@ -51,27 +52,32 @@ const Dashboard = () => {
   }
 
   return (
-    <div>
+    <>
       <Navbar userEmail={user.email} />
-      <Box sx={{ mt: 4, textAlign: "center" }}>
-        {" "}
+
+      <Box
+        sx={{
+          mt: 2,
+          textAlign: "center",
+          paddingBottom: "80px",
+        }}
+      >
         <Grid container spacing={4} justifyContent="center">
           <Grid gridColumn="span 12" gridRow="span 6">
-            <UserVehicleInfo onPairingSuccess={handlePairingSuccess} />{" "}
+            <UserVehicleInfo onPairingSuccess={handlePairingSuccess} />
           </Grid>
           <Grid gridColumn="span 12" gridRow="span 6">
-            <LocationInfo />{" "}
-          </Grid>
-          <Grid gridColumn="span 12" gridRow="span 6">
-            {vehicleLoading ? (
-              <CircularProgress />
-            ) : (
-              <CurrentCost vehicleId={currentVehicle?.id} />
-            )}
+            <LocationInfo />
           </Grid>
         </Grid>
+
+        <Box sx={{ mx: -1, width: "calc(100% + 16px)", mt: 4 }}>
+          <MapWrapper />
+        </Box>
       </Box>
-    </div>
+
+      <Footer vehicleLoading={vehicleLoading} vehicleId={currentVehicle?.id} />
+    </>
   );
 };
 

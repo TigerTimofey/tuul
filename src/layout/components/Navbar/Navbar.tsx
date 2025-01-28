@@ -22,7 +22,7 @@ const Navbar: React.FC<NavbarProps> = ({ userEmail }) => {
         sx={{
           display: "flex",
           justifyContent: "space-between",
-          backgroundColor: "var(  --brand--blue--color)",
+          backgroundColor: "var(--brand--blue--color)",
         }}
       >
         <Typography

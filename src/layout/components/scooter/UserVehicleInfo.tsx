@@ -32,13 +32,13 @@ const UserVehicleInfo: React.FC<UserVehicleInfoProps> = ({
   const handleUnpairSuccess = async () => {
     await handleUnpair();
     setPairedVehicle(null);
-    onPairingSuccess(null); // Notify parent component about unpair
+    onPairingSuccess(null);
   };
 
   const activeVehicle = pairedVehicle || vehicle;
 
   return (
-    <Box sx={{ padding: 4 }}>
+    <Box sx={{ padding: 1 }}>
       <Grid container spacing={4} justifyContent="center">
         <Grid gridColumn="span 12" gridRow="span 6">
           <Card
@@ -56,10 +56,10 @@ const UserVehicleInfo: React.FC<UserVehicleInfoProps> = ({
               >
                 🛴 Vehicle Information
               </Typography>
-              <Divider sx={{ marginY: 2 }} />
+              <Divider sx={{ marginY: 1 }} />
 
               {error && (
-                <Box sx={{ marginBottom: 2 }}>
+                <Box sx={{ marginBottom: 1 }}>
                   <ErrorAlert error={error} />
                 </Box>
               )}
