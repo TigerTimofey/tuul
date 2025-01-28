@@ -23,7 +23,7 @@ const UnpairButton: React.FC<UnpairButtonProps> = ({ onClick, loading }) => {
         },
       }}
     >
-      {loading ? "Unpairing..." : "Unpair Scooter"}
+      {loading ? "Unpairing..." : "Unpair"}
     </Button>
   );
 };

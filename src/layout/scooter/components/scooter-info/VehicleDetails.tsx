@@ -54,7 +54,7 @@ const VehicleDetails: React.FC<VehicleDetailsProps> = ({
       <Paper
         elevation={4}
         sx={{
-          width: "300px",
+          // width: "300px",
           padding: 2,
           borderRadius: 3,
           backgroundColor: "var(--brand--white--color)",
@@ -141,7 +141,16 @@ const VehicleDetails: React.FC<VehicleDetailsProps> = ({
           />
         </Grid>
 
-        <Box textAlign="center" mt={4} sx={{ display: "flex", gap: 2 }}>
+        <Box
+          textAlign="center"
+          mt={4}
+          sx={{
+            display: "flex",
+            gap: 2,
+            alignContent: "center",
+            justifyContent: "center",
+          }}
+        >
           <UnpairButton onClick={onUnpair} loading={unpairLoading} />
           <TogglePowerButton
             isPoweredOn={isPoweredOn}

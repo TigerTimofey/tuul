@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 import axios from "axios";
 
 interface TogglePowerButtonProps {
@@ -42,6 +42,7 @@ const TogglePowerButton: React.FC<TogglePowerButtonProps> = ({
         onClick={handleToggle}
         disabled={loading}
         sx={{
+          width: "100px",
           backgroundColor: isPoweredOn
             ? "var(--brand--green--color)"
             : "var(--brand--red--color)",
@@ -57,7 +58,16 @@ const TogglePowerButton: React.FC<TogglePowerButtonProps> = ({
           },
         }}
       >
-        {loading ? "Loading..." : isPoweredOn ? "ON" : "OFF"}
+        {loading ? (
+          <CircularProgress
+            size={24}
+            sx={{ color: "var(--brand--white--color)" }}
+          />
+        ) : isPoweredOn ? (
+          "ON"
+        ) : (
+          "OFF"
+        )}
       </Button>
       {error && <p style={{ color: "red" }}>{error}</p>}{" "}
     </div>
