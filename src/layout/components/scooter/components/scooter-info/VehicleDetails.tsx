@@ -41,7 +41,6 @@ const VehicleDetails: React.FC<VehicleDetailsProps> = ({
   const [isPoweredOn, setIsPoweredOn] = useState(vehicle.poweredOn);
   const [isLocked, setIsLocked] = useState(vehicle.locked);
 
-  // Keep local state in sync with vehicle props
   useEffect(() => {
     setIsLocked(vehicle.locked);
     setIsPoweredOn(vehicle.poweredOn);
@@ -63,14 +62,12 @@ const VehicleDetails: React.FC<VehicleDetailsProps> = ({
         alignItems: "center",
       }}
     >
-      <Paper
-        elevation={4}
+      <Box
         sx={{
           // width: "300px",
           padding: 2,
           borderRadius: 3,
           backgroundColor: "var(--brand--white--color)",
-          boxShadow: "0 6px 20px rgba(0, 0, 0, 0.1)",
         }}
       >
         <Typography
@@ -176,7 +173,7 @@ const VehicleDetails: React.FC<VehicleDetailsProps> = ({
             vehicleId={vehicle.id}
           />
         </Box>
-      </Paper>
+      </Box>
     </Box>
   );
 };

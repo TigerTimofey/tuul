@@ -25,6 +25,8 @@ export const useVehicleData = () => {
 
   const setVehicleDirectly = (newVehicle: Vehicle | null) => {
     setVehicle(newVehicle);
+    // Reset error state when setting new vehicle
+    setError(null);
   };
 
   const fetchUserByEmail = async (email: string) => {
@@ -81,7 +83,7 @@ export const useVehicleData = () => {
   };
 
   const handleUnpair = async () => {
-    if (!vehicle) return;
+    if (!vehicle) return false;
     setUnpairLoading(true);
     try {
       const auth = getAuth();
@@ -96,7 +98,7 @@ export const useVehicleData = () => {
         {
           method: "POST",
           headers: {
-            Authorization: idToken,
+            Authorization: `Bearer ${idToken}`,
             "Content-Type": "application/json",
           },
         }
@@ -106,10 +108,19 @@ export const useVehicleData = () => {
         throw new Error("Failed to unpair the scooter");
       }
 
-      setVehicle(null);
+      // Clear vehicle state immediately
+      setVehicleDirectly(null);
+
+      // Refresh user data to ensure consistency
+      if (user.email) {
+        await fetchUserByEmail(user.email);
+      }
+
       return true;
     } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
+      setError(
+        err instanceof Error ? err.message : "Failed to unpair the scooter"
+      );
       return false;
     } finally {
       setUnpairLoading(false);

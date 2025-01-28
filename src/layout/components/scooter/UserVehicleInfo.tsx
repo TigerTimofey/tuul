@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Card,
@@ -21,24 +21,40 @@ const UserVehicleInfo: React.FC<UserVehicleInfoProps> = ({
   onPairingSuccess,
 }) => {
   const [pairedVehicle, setPairedVehicle] = useState<Vehicle | null>(null);
-  const { vehicle, loading, error, unpairLoading, handleUnpair } =
-    useVehicleData();
+  const {
+    vehicle,
+    loading,
+    error,
+    unpairLoading,
+    handleUnpair,
+    setVehicleDirectly,
+  } = useVehicleData();
 
   const handleSuccess = (newVehicle: Vehicle) => {
     setPairedVehicle(newVehicle);
+    setVehicleDirectly(newVehicle);
     onPairingSuccess(newVehicle);
   };
 
   const handleUnpairSuccess = async () => {
-    await handleUnpair();
-    setPairedVehicle(null);
-    onPairingSuccess(null);
+    const success = await handleUnpair();
+    if (success) {
+      setPairedVehicle(null);
+      setVehicleDirectly(null);
+      onPairingSuccess(null);
+    }
   };
+
+  useEffect(() => {
+    if (!pairedVehicle && vehicle) {
+      setPairedVehicle(vehicle);
+    }
+  }, [vehicle]);
 
   const activeVehicle = pairedVehicle || vehicle;
 
   return (
-    <Box sx={{ padding: 4 }}>
+    <Box sx={{ padding: 0 }}>
       <Grid container spacing={4} justifyContent="center">
         <Grid gridColumn="span 12" gridRow="span 6">
           <Card

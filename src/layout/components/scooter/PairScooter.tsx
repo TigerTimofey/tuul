@@ -16,7 +16,6 @@ const PairScooter: React.FC<PairScooterProps> = ({ onSuccess }) => {
   const { pairingCode, setPairingCode, error, loading, handlePairScooter } =
     usePairScooter(onSuccess);
 
-  // Update pairingCode when selectedCode changes
   useEffect(() => {
     if (selectedCode) {
       setPairingCode(selectedCode);

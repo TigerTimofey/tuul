@@ -66,7 +66,7 @@ const Dashboard = () => {
           <Grid gridColumn="span 12" gridRow="span 6">
             <UserVehicleInfo onPairingSuccess={handlePairingSuccess} />
           </Grid>
-          <Grid gridColumn="span 12" gridRow="span 6">
+          <Grid gridColumn="span 12">
             <LocationInfo />
           </Grid>
         </Grid>
