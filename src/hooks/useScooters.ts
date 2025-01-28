@@ -16,7 +16,9 @@ export const useScooters = () => {
 
   const fetchScooters = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/vehicles/all");
+      const response = await fetch(
+        `${import.meta.env.VITE_FIREBASE_BACKEND_URL}/api/vehicles/all`
+      );
       if (!response.ok) throw new Error("Failed to fetch scooters");
       const data = await response.json();
       setScooters(data);
