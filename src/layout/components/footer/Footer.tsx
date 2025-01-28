@@ -1,4 +1,3 @@
-// Footer.tsx
 import { CircularProgress, Box, Typography } from "@mui/material";
 import CurrentCost from "../scooter/components/cost/CurrentCost";
 

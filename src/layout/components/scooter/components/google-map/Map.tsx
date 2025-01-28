@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { GoogleMap } from "@react-google-maps/api";
+import { GoogleMap, Marker } from "@react-google-maps/api";
 import useLocation from "../../../../../hooks/useLocation";
 
 interface MapProps {
@@ -9,6 +9,8 @@ interface MapProps {
 const Map = ({ height = "400px" }: MapProps) => {
   const { latitude, longitude, fetchLocation, error } = useLocation();
   const [mapCenter, setMapCenter] = useState({ lat: 0, lng: 0 });
+  const [markerPosition, setMarkerPosition] =
+    useState<google.maps.LatLngLiteral | null>(null);
 
   useEffect(() => {
     fetchLocation();
@@ -16,10 +18,12 @@ const Map = ({ height = "400px" }: MapProps) => {
 
   useEffect(() => {
     if (latitude && longitude) {
-      setMapCenter({
+      const newPosition = {
         lat: parseFloat(latitude),
         lng: parseFloat(longitude),
-      });
+      };
+      setMapCenter(newPosition);
+      setMarkerPosition(newPosition);
     }
   }, [latitude, longitude]);
 
@@ -35,18 +39,23 @@ const Map = ({ height = "400px" }: MapProps) => {
           width: "100%",
         }}
         center={mapCenter}
-        zoom={14}
-        onLoad={(map) => {
-          if (window.google && mapCenter.lat !== 0) {
-            const { AdvancedMarkerElement } = window.google.maps.marker;
-            new AdvancedMarkerElement({
-              position: mapCenter,
-              map: map,
-              title: "Your location",
-            });
-          }
-        }}
-      />
+        zoom={17}
+      >
+        {markerPosition && (
+          <Marker
+            position={markerPosition}
+            title="Your location"
+            icon={{
+              path: google.maps.SymbolPath.CIRCLE,
+              scale: 10,
+              fillColor: "#4285F4",
+              fillOpacity: 1,
+              strokeColor: "#ffffff",
+              strokeWeight: 2,
+            }}
+          />
+        )}
+      </GoogleMap>
     </div>
   );
 };

@@ -38,7 +38,7 @@ const UserVehicleInfo: React.FC<UserVehicleInfoProps> = ({
   const activeVehicle = pairedVehicle || vehicle;
 
   return (
-    <Box sx={{ padding: 1 }}>
+    <Box sx={{ padding: 4 }}>
       <Grid container spacing={4} justifyContent="center">
         <Grid gridColumn="span 12" gridRow="span 6">
           <Card
