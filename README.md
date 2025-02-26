@@ -13,7 +13,7 @@
   - [Installation](#installation)
 - [Contributor](#contributors)
 
-A React-based web application for managing and controlling shared electric scooters. This application provides a seamless interface for users to authenticate, pair with scooters, and control their operations.
+A React-based web application for managing and controlling shared electric scooters. This application provides a seamless interface for users to authenticate, pair with scooters, and control their operations. You also need to run [backend-part](https://github.com/TigerTimofey/tuul-back).
 
 ## Video Demonstration 
 
